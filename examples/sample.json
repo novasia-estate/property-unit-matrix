@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "building_id": "SYNTHETIC-COURT-NOT-A-REAL-PROJECT",
+  "label_scope": "floor",
+  "floors": [{"id":"L1","label":"Level 1"},{"id":"L2","label":"Level 2"},{"id":"G","label":"Ground / nonresidential"}],
+  "stacks": [{"id":"A","label":"East"},{"id":"B","label":"West"}],
+  "expected_cells": [{"floor":"L1","stack":"A"},{"floor":"L1","stack":"B"},{"floor":"L2","stack":"A"},{"floor":"L2","stack":"B"}],
+  "units": [
+    {"id":"DEMO-101","floor":"L1","stack":"A","label":"101"},
+    {"id":"DEMO-201","floor":"L2","stack":"A","label":"201"},
+    {"id":"DEMO-201B","floor":"L2","stack":"A","label":"201 replacement?"},
+    {"id":"DEMO-202","floor":"L2","stack":"B","label":"202"},
+    {"id":"DEMO-INVALID","floor":"L9","stack":"B","label":"unknown floor"}
+  ]
+}

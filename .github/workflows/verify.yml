@@ -1,0 +1,35 @@
+name: Verify
+on: [push, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-latest, ldc-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+      - run: dub test --config=unittest
+      - run: dub build --config=cli
+      - run: |
+          set +e
+          ./unit-matrix examples/sample.json --html out/report.html --json out/report.json
+          result=$?
+          set -e
+          test "$result" = 1
+          python3 - <<'PY'
+          import json
+          r=json.load(open('out/report.json'))
+          assert r['summary']=={'total_rows':5,'accepted_rows':2,'expected_cells':4,'occupied_cells':2,'missing_cells':1,'review_cells':1},r
+          assert len(r['issues'])==3
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unit-matrix-${{ matrix.compiler }}
+          path: out/

@@ -1,0 +1,10 @@
+.dub/
+unit-matrix
+unit-matrix.exe
+*.obj
+*.o
+*.lib
+*.a
+docs-generated/
+out/
+dub.selections.json

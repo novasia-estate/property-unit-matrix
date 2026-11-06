@@ -1,0 +1,14 @@
+{
+  "name": "property-unit-matrix",
+  "description": "Audit an explicitly declared building unit matrix: missing cells, conflicting placements, duplicate identifiers and floor-scoped labels. By NovAsia Estate.",
+  "authors": ["NovAsia Estate"],
+  "copyright": "Copyright 2026 NovAsia Estate",
+  "license": "MIT",
+  "homepage": "https://novasia.estate/",
+  "targetType": "library",
+  "configurations": [
+    {"name": "library", "excludedSourceFiles": ["source/app.d"]},
+    {"name": "unittest", "targetType": "executable", "sourcePaths": ["source", "tests"], "excludedSourceFiles": ["source/app.d"]},
+    {"name": "cli", "targetType": "executable", "targetName": "unit-matrix"}
+  ]
+}
