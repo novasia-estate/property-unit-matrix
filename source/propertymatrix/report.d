@@ -4,6 +4,7 @@ import std.json;
 import std.conv : to;
 import std.array : appender;
 import std.string : replace;
+private alias JsonObject = JSONValue[string];
 
 /** Escape text, including caller-supplied axis labels and IDs. */
 string escapeHtml(string s) {
@@ -12,17 +13,17 @@ string escapeHtml(string s) {
 
 /** Explicit allowlist of report fields; unknown source properties are not exported. */
 string jsonReport(const Result r) {
-    JSONValue root=JSONValue(JSONValue[string].init);
+    JSONValue root=JSONValue(JsonObject.init);
     root["schema_version"]=JSONValue(1);
     root["building_id"]=JSONValue(r.buildingId);root["label_scope"]=JSONValue(r.labelScope);
-    JSONValue stats=JSONValue(JSONValue[string].init);
+    JSONValue stats=JSONValue(JsonObject.init);
     stats["total_rows"]=JSONValue(cast(ulong)r.totalRows);stats["accepted_rows"]=JSONValue(cast(ulong)r.acceptedRows);
     stats["expected_cells"]=JSONValue(cast(ulong)r.expectedCells);stats["occupied_cells"]=JSONValue(cast(ulong)r.occupiedCells);
     stats["missing_cells"]=JSONValue(cast(ulong)r.missingCells);stats["review_cells"]=JSONValue(cast(ulong)r.reviewCells);
     root["summary"]=stats;
     JSONValue[] cells, issues;
     foreach(c;r.cells) {
-        JSONValue x=JSONValue(JSONValue[string].init);
+        JSONValue x=JSONValue(JsonObject.init);
         x["floor"]=JSONValue(c.floor);x["stack"]=JSONValue(c.stack);x["status"]=JSONValue(c.status);
         JSONValue[] rows,labels;
         foreach(n;c.rows)rows~=JSONValue(cast(ulong)n);
@@ -30,7 +31,7 @@ string jsonReport(const Result r) {
         x["rows"]=JSONValue(rows);x["labels"]=JSONValue(labels);cells~=x;
     }
     foreach(i;r.issues) {
-        JSONValue x=JSONValue(JSONValue[string].init);
+        JSONValue x=JSONValue(JsonObject.init);
         x["row"]=JSONValue(cast(ulong)i.row);x["code"]=JSONValue(i.code);x["message"]=JSONValue(i.message);issues~=x;
     }
     root["cells"]=JSONValue(cells);root["issues"]=JSONValue(issues);

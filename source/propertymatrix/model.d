@@ -48,8 +48,8 @@ Plan parsePlan(string text) {
     enforce(text.length <= 10_000_000, "Input exceeds 10 MB limit");
     auto obj = parseJSON(text);
     enforce(obj.type == JSONType.object, "Top-level JSON object required");
-    auto version = "schema_version" in obj.object;
-    enforce(version !is null && version.type == JSONType.integer && version.integer == 1,
+    auto schemaVersion = "schema_version" in obj.object;
+    enforce(schemaVersion !is null && schemaVersion.type == JSONType.integer && schemaVersion.integer == 1,
         "schema_version must be integer 1");
     Plan p;
     p.buildingId = requiredText(obj, "building_id");
