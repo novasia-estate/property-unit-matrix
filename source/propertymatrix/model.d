@@ -91,7 +91,8 @@ Plan parsePlan(string text) {
 
 /** Validate programmatic inputs too; axes and planned positions must be unambiguous. */
 void validatePlan(const Plan p) {
-    enforce(p.buildingId.length && p.buildingId.length <= 256, "Invalid building identifier");
+    validate(p.buildingId);
+    enforce(p.buildingId.length && p.buildingId.length <= 256 && p.buildingId==strip(p.buildingId), "Invalid building identifier");
     enforce(p.labelScope == "floor" || p.labelScope == "building", "Invalid label scope");
     enforce(p.floors.length > 0 && p.floors.length <= 200 && p.stacks.length > 0 && p.stacks.length <= 200,
         "Each axis requires 1..200 entries");

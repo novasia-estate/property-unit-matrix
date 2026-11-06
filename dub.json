@@ -8,7 +8,7 @@
   "targetType": "library",
   "configurations": [
     {"name": "library", "excludedSourceFiles": ["source/app.d"]},
-    {"name": "unittest", "targetType": "executable", "sourcePaths": ["source", "tests"], "excludedSourceFiles": ["source/app.d"]},
+    {"name": "unittest", "targetType": "executable", "sourcePaths": ["source", "tests"], "mainSourceFile": "tests/main.d", "excludedSourceFiles": ["source/app.d"]},
     {"name": "cli", "targetType": "executable", "targetName": "unit-matrix"}
   ]
 }

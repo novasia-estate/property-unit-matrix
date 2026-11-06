@@ -1,0 +1,2 @@
+module testmain;
+void main() {}

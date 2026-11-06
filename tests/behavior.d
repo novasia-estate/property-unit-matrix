@@ -40,3 +40,11 @@ unittest {auto p=sample();p.buildingId="<script>alert(1)</script>";auto html=htm
 unittest {auto p=sample();p.units[0].label="<img src=x>";auto html=htmlReport(audit(p));assert(indexOf(html,"<img src=x>")==-1 && indexOf(html,"&lt;img")>=0);}
 unittest {assertThrown(parsePlan(`{"schema_version":2}`));}
 unittest {auto p=sample();p.floors[0].label=" outer ";assertThrown(audit(p));}
+unittest {auto p=sample();p.buildingId=" outer ";assertThrown(audit(p));}
+unittest {auto p=sample();p.buildingId=cast(string)[cast(ubyte)255];assertThrown(audit(p));}
+private string inputRow(string row) {
+    return `{"schema_version":1,"building_id":"DEMO","label_scope":"floor","floors":[{"id":"1","label":"One"}],"stacks":[{"id":"A","label":"A"}],"expected_cells":[{"floor":"1","stack":"A"}],"units":[`~row~`]}`;
+}
+unittest {auto r=audit(parsePlan(inputRow(`42`)));assert(r.issues[0].code=="invalid_row" && r.missingCells==1);}
+unittest {auto r=audit(parsePlan(inputRow(`{"id":42,"floor":"1","stack":"A","label":"01"}`)));assert(r.issues[0].code=="invalid_row" && r.reviewCells==1);}
+unittest {auto r=audit(parsePlan(inputRow(`{"id":"u1","floor":"1","stack":"A","label":"01","private_note":"SECRET-DO-NOT-EXPORT"}`)));assert(indexOf(jsonReport(r),"SECRET-DO-NOT-EXPORT")==-1 && indexOf(htmlReport(r),"SECRET-DO-NOT-EXPORT")==-1);}
